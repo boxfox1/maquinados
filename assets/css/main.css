@@ -17,6 +17,13 @@
   /* Acento visual (sin rediseñar) */
   --accent: #66b6ff;
   --title-glow: 0 0 22px rgba(102, 182, 255, 0.18);
+
+  /* Header / Logo */
+  --header-h: 52px;
+  --logo-h: 42px;
+
+  /* WhatsApp flotante */
+  --wa-bg: #157347;
 }
 
 /* =========================
@@ -27,7 +34,7 @@ body {
   background: var(--bg);
   overflow-x: hidden;
   overflow-y: auto;
-  overscroll-behavior-y: auto; /* clave: no bloquear wheel */
+  overscroll-behavior-y: auto; /* no bloquear wheel */
 }
 
 * {
@@ -94,13 +101,15 @@ h3 {
   border-bottom: 1px solid var(--line);
 }
 
-.header__inner{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  min-height:92px;     /* altura corporativa */
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--header-h);
+  padding: 4px 0; /* compacta */
 }
 
+/* Brand / Logo */
 .brand {
   display: flex;
   align-items: center;
@@ -109,9 +118,10 @@ h3 {
 
 .brand-logo {
   display: block;
-  width: 52px;
-  height: 52px;
+  height: var(--logo-h);
+  width: auto;
   object-fit: contain;
+  object-position: left center;
   filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
 }
 
@@ -128,15 +138,15 @@ h3 {
 .nav {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
 .nav a {
-  color: rgba(102, 182, 255, 0.92); /* color en menú */
+  color: rgba(102, 182, 255, 0.92);
   font-weight: 600;
   font-size: 14px;
-  padding: 5px 8px;
-  border-radius: 12px;
+  padding: 4px 8px;
+  border-radius: 10px;
 }
 
 .nav a:hover {
@@ -149,18 +159,19 @@ h3 {
   background: rgba(31, 143, 229, 0.18);
   color: var(--text) !important;
   border: 1px solid rgba(31, 143, 229, 0.35);
+  padding: 6px 12px;
+  border-radius: 10px;
 }
 
 .navbtn {
   display: none;
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--line);
   cursor: pointer;
 }
-
 .navbtn span {
   display: block;
   height: 2px;
@@ -244,7 +255,7 @@ h1 {
   background: rgba(255, 255, 255, 0.06);
 }
 
-/* WhatsApp: verde corporativo */
+/* WhatsApp (si aún existe botón de texto en hero) */
 .btn.whatsapp {
   background: #157347;
   border-color: #146c43;
@@ -315,17 +326,12 @@ h1 {
 .section__head h2 {
   margin: 0 0 8px;
   font-size: 26px;
-  color: var(--accent); /* títulos en azul */
+  color: var(--accent);
 }
 
 .section__head p {
   margin: 0;
   color: var(--muted);
-}
-
-/* CTA h2 también en azul */
-.ctaBox h2 {
-  color: var(--accent);
 }
 
 /* =========================
@@ -336,7 +342,6 @@ h1 {
   grid-template-columns: repeat(3, 1fr);
   gap: 14px;
 }
-
 .grid2 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -352,17 +357,14 @@ h1 {
   border-radius: var(--radius);
   padding: 18px;
 }
-
 .tile h3 {
   margin: 0 0 8px;
   font-size: 18px;
 }
-
 .tile p {
   margin: 0 0 10px;
   color: var(--muted);
 }
-
 .tile ul {
   margin: 0;
   padding-left: 18px;
@@ -375,7 +377,6 @@ h1 {
   border-radius: var(--radius);
   padding: 18px;
 }
-
 .panel h3 {
   margin: 0 0 8px;
   font-size: 18px;
@@ -387,13 +388,11 @@ h1 {
   list-style: none;
   color: var(--muted);
 }
-
 .check li {
   margin: 8px 0;
   padding-left: 22px;
   position: relative;
 }
-
 .check li:before {
   content: "✓";
   position: absolute;
@@ -420,7 +419,6 @@ h1 {
   flex-wrap: wrap;
   gap: 10px;
 }
-
 .chips span {
   padding: 10px 12px;
   border-radius: 999px;
@@ -439,12 +437,10 @@ h1 {
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
-
 .shot {
   border-radius: 16px;
   overflow: hidden;
 }
-
 .shot img {
   width: 100%;
   height: 100%;
@@ -452,7 +448,6 @@ h1 {
   object-fit: cover;
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
-
 .shot-img {
   cursor: zoom-in;
 }
@@ -474,19 +469,16 @@ h1 {
   grid-template-columns: repeat(5, 1fr);
   gap: 12px;
 }
-
 .steps li {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 14px;
 }
-
 .steps strong {
   display: block;
   margin-bottom: 8px;
 }
-
 .steps span {
   color: var(--muted);
   font-size: 13px;
@@ -500,12 +492,10 @@ h1 {
   padding: 12px 14px;
   margin: 10px 0;
 }
-
 .faq summary {
   cursor: pointer;
   font-weight: 700;
 }
-
 .faq p {
   color: var(--muted);
   margin: 10px 0 0;
@@ -529,10 +519,12 @@ h1 {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--line);
   border-radius: calc(var(--radius) + 4px);
-  padding: 18px; /* un poco más ligero */
+  padding: 18px;
   box-shadow: var(--shadow);
 }
-
+.ctaBox h2 {
+  color: var(--accent);
+}
 .ctaBox p {
   margin: 0 0 14px;
   color: var(--muted);
@@ -546,24 +538,20 @@ h1 {
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(0, 0, 0, 0.14);
 }
-
 .sendPlan__title {
   font-weight: 800;
   color: rgba(102, 182, 255, 0.95);
   margin-bottom: 8px;
 }
-
 .sendPlan__list {
   margin: 0;
   padding-left: 18px;
   color: var(--muted);
   font-size: 13px;
 }
-
 .sendPlan__list li {
   margin: 6px 0;
 }
-
 .sendPlan__list a {
   text-decoration: underline;
 }
@@ -574,21 +562,18 @@ h1 {
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
-
 .form__actions {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 10px;
 }
-
 label {
   display: block;
   font-size: 13px;
   color: var(--muted);
   margin: 10px 0;
 }
-
 input,
 textarea {
   width: 100%;
@@ -600,7 +585,6 @@ textarea {
   color: var(--text);
   outline: none;
 }
-
 input:focus,
 textarea:focus {
   border-color: rgba(31, 143, 229, 0.55);
@@ -614,7 +598,6 @@ textarea:focus {
   padding: 20px 0 14px;
   background: rgba(0, 0, 0, 0.15);
 }
-
 .footer__inner {
   display: flex;
   align-items: center;
@@ -622,17 +605,14 @@ textarea:focus {
   gap: 14px;
   flex-wrap: wrap;
 }
-
 .footer__links a {
   color: var(--muted);
   font-size: 13px;
 }
-
 .sep {
   color: rgba(255, 255, 255, 0.25);
   margin: 0 8px;
 }
-
 .footer__bottom {
   margin-top: 10px;
 }
@@ -668,7 +648,7 @@ textarea:focus {
   .nav {
     position: absolute;
     right: 14px;
-    top: 76px; /* coincide con header más alto */
+    top: var(--header-h);
     background: rgba(15, 20, 26, 0.96);
     border: 1px solid var(--line);
     border-radius: 16px;
@@ -745,18 +725,15 @@ textarea:focus {
   place-items: center;
   font-size: 26px;
 }
-
 .lb-close {
   top: 18px;
   right: 18px;
   transform: none;
   font-size: 28px;
 }
-
 .lb-prev {
   left: 18px;
 }
-
 .lb-next {
   right: 18px;
 }
@@ -774,68 +751,43 @@ textarea:focus {
   }
 }
 
-/* HEADER más compacto */
-.header__inner{
-  min-height: 52px;     /* altura total */
-  padding: 4px 0;
-}
-
-/* Logo */
-.brand-logo{
-  height: 30px !important;
-}
-
-/* Links menú */
-.nav a{
-  padding: 4px 8px;
-  font-size: 14px;
-}
-
-/* Botón cotizar */
-.nav__cta{
-  padding: 6px 12px;
-  border-radius: 10px;
-}
-/* =========================================
+/* =========================
    WhatsApp Floating Button
-========================================= */
-.wa-float{
+========================= */
+.wa-float {
   position: fixed;
   right: 22px;
   bottom: 22px;
-  width: 50px;
-  height: 50px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
-  background: #157347;
+  background: var(--wa-bg);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 14px 28px rgba(0,0,0,.35);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.35);
   z-index: 9999;
-  transition: transform .15s ease, box-shadow .15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.35s ease;
 }
 
-.wa-float img{
-  width: 50px;
-  height: 50px;
+.wa-float img {
+  width: 54px;
+  height: 54px;
+  display: block;
 }
 
-.wa-float:hover{
+.wa-float:hover {
   transform: translateY(-3px);
-  box-shadow: 0 18px 34px rgba(0,0,0,.45);
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.45);
 }
-
-/* ===== LOGO estable (sin recorte raro) ===== */
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.brand-logo{
+/* ===== FIX: logo se ve chico por aire dentro del archivo ===== */
+.brand-logo {
   height: 32px !important;
   width: auto !important;
-  object-fit: contain !important;     /* aquí sí corresponde con width:auto */
-  object-position: left center !important;
-  display:block;
+  object-fit: contain !important;
+  transform: scale(1); /* “zoom” al contenido */
+  transform-origin: left center;
 }
