@@ -35,7 +35,20 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="assets/css/main.css?v=3" />
+
+    <style>
+      .brand {
+        align-items: center !important;
+      }
+      .brand-logo {
+        width: 64px !important;
+        height: 64px !important;
+      }
+      .header__inner {
+        min-height: 76px !important;
+      }
+    </style>
 
     <!-- Google tag (gtag.js) -->
     <script
@@ -53,8 +66,6 @@
   </head>
 
   <body>
-    <a class="skip" href="#main">Saltar al contenido</a>
-
     <header class="header">
       <div class="wrap header__inner">
         <a class="brand" href="/" aria-label="Boxfox1 Maquinados">
@@ -111,14 +122,6 @@
             <div class="cta">
               <a class="btn primary" id="btnQuoteTop" href="#cotizar"
                 >Enviar planos para cotización</a
-              >
-              <a
-                class="btn whatsapp"
-                id="btnWhatsTop"
-                href="#"
-                target="_blank"
-                rel="noopener"
-                >WhatsApp</a
               >
             </div>
 
@@ -533,5 +536,13 @@
     </script>
 
     <script src="assets/js/main.js"></script>
+
+<a href="https://wa.me/524444989198"
+   class="wa-float"
+   target="_blank"
+   aria-label="WhatsApp">
+   <img src="assets/img/whatsapp-icon.svg" alt="WhatsApp">
+</a>
+
   </body>
 </html>

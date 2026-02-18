@@ -16,7 +16,8 @@
     });
 
     nav.addEventListener("click", (e) => {
-      if (e.target && e.target.tagName === "A") nav.classList.remove("open");
+      const a = e.target.closest("a");
+      if (a) nav.classList.remove("open");
     });
 
     document.addEventListener("click", (e) => {
@@ -33,20 +34,20 @@
     `${waBase}?text=${encodeURIComponent(`[${origin}] ${msg}`)}`;
 
   const btnWhatsTop = $("#btnWhatsTop");
-  const btnWhatsBottom = $("#btnWhatsBottom");
   const footerWhats = $("#footerWhats");
 
   const defaultWA =
     "Hola, quiero cotizar un maquinado. Enviaré plano/muestra. ¿Qué información necesitas (material, tolerancias, cantidad, fecha)?";
 
-  [btnWhatsTop, btnWhatsBottom, footerWhats].forEach((el) => {
+  [btnWhatsTop, footerWhats].forEach((el) => {
     if (el) el.href = waText(defaultWA);
   });
 
   // Lightbox gallery
-  const lb = document.getElementById("lightbox");
-  const lbImg = document.getElementById("lbImg");
-  const lbCap = document.getElementById("lbCap");
+  const lb = $("#lightbox");
+  const lbImg = $("#lbImg");
+  const lbCap = $("#lbCap");
+
   const btnClose = lb ? lb.querySelector(".lb-close") : null;
   const btnPrev = lb ? lb.querySelector(".lb-prev") : null;
   const btnNext = lb ? lb.querySelector(".lb-next") : null;
@@ -56,12 +57,22 @@
   );
 
   let idx = 0;
-  let prevOverflow = "";
+  let prevBodyOverflow = "";
+
+  function setScrollLock(lock) {
+    // Important: lock/unlock scroll safely
+    if (lock) {
+      prevBodyOverflow = document.body.style.overflow || "";
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = prevBodyOverflow;
+    }
+  }
 
   function openLB(i) {
     if (!lb || !lbImg || !items.length) return;
-    idx = i;
 
+    idx = ((i % items.length) + items.length) % items.length;
     const el = items[idx];
     if (!el) return;
 
@@ -71,47 +82,87 @@
 
     lb.classList.add("open");
     lb.setAttribute("aria-hidden", "false");
-
-    prevOverflow = document.body.style.overflow || "";
-    document.body.style.overflow = "hidden";
+    setScrollLock(true);
   }
 
   function closeLB() {
     if (!lb || !lbImg) return;
+
     lb.classList.remove("open");
     lb.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = prevOverflow;
     lbImg.src = "";
+    setScrollLock(false);
   }
 
   function prev() {
     if (!items.length) return;
-    openLB((idx - 1 + items.length) % items.length);
+    openLB(idx - 1);
   }
 
   function next() {
     if (!items.length) return;
-    openLB((idx + 1) % items.length);
+    openLB(idx + 1);
   }
 
   if (lb && items.length) {
+    // Make images & figures clickable (móvil)
     items.forEach((img, i) => {
-      img.addEventListener("click", () => openLB(i));
+      img.style.cursor = "zoom-in";
+      img.addEventListener("click", (e) => {
+        e.preventDefault();
+        openLB(i);
+      });
+
+      const fig = img.closest("figure");
+      if (fig) {
+        fig.style.cursor = "zoom-in";
+        fig.addEventListener("click", (e) => {
+          // evita doble disparo
+          if (e.target === img) return;
+          e.preventDefault();
+          openLB(i);
+        });
+      }
     });
 
-    if (btnClose) btnClose.addEventListener("click", closeLB);
-    if (btnPrev) btnPrev.addEventListener("click", prev);
-    if (btnNext) btnNext.addEventListener("click", next);
+    btnClose && btnClose.addEventListener("click", closeLB);
+    btnPrev && btnPrev.addEventListener("click", prev);
+    btnNext && btnNext.addEventListener("click", next);
 
+    // Cerrar si dan click en el fondo (no sobre la imagen/botones)
     lb.addEventListener("click", (e) => {
-      if (e.target === lb) closeLB();
+      const clickedButton = e.target.closest(".lb-btn");
+      const clickedImage = e.target === lbImg;
+      if (!clickedButton && !clickedImage && e.target === lb) closeLB();
     });
 
+    // Teclado
     window.addEventListener("keydown", (e) => {
       if (!lb.classList.contains("open")) return;
       if (e.key === "Escape") closeLB();
       if (e.key === "ArrowLeft") prev();
       if (e.key === "ArrowRight") next();
     });
+
+    // Seguridad: si por cualquier razón el lightbox pierde el estado,
+    // re-habilita scroll
+    window.addEventListener("focus", () => {
+      if (!lb.classList.contains("open")) setScrollLock(false);
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && lb.classList.contains("open")) return;
+      if (!lb.classList.contains("open")) setScrollLock(false);
+    });
+  } else {
+    // Si no hay lightbox, asegúrate que nunca quede scroll bloqueado
+    document.body.style.overflow = "";
   }
+  // Seguridad: nunca dejar el body sin scroll si el lightbox NO está abierto
+  setInterval(() => {
+    const lb = document.getElementById("lightbox");
+    if (!lb || !lb.classList.contains("open")) {
+      if (document.body.style.overflow === "hidden")
+        document.body.style.overflow = "";
+    }
+  }, 500);
 })();
