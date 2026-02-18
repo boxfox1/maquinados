@@ -36,6 +36,7 @@
     />
 
     <link rel="stylesheet" href="/assets/css/main.css" />
+
     <!-- Google tag (gtag.js) -->
     <script
       async
@@ -47,7 +48,6 @@
         dataLayer.push(arguments);
       }
       gtag("js", new Date());
-
       gtag("config", "G-DFSQE9YB3K");
     </script>
   </head>
@@ -57,16 +57,18 @@
 
     <header class="header">
       <div class="wrap header__inner">
-        <div class="brand">
-          <a
-            class="brand__link"
-            href="/"
-            aria-label="Boxfox1 Maquinados - Inicio"
-          >
-            <span class="brand__mark" aria-hidden="true">B</span>
-            <span class="brand__text">BOXFOX1 <small>Maquinados</small></span>
-          </a>
-        </div>
+        <a class="brand" href="/" aria-label="Boxfox1 Maquinados">
+          <img
+            class="brand-logo"
+            src="assets/img/boxfox1.logo.white.webp"
+            alt="Boxfox1"
+            width="48"
+            height="48"
+          />
+          <span class="brand-text">
+            <small>Maquinados</small>
+          </span>
+        </a>
 
         <button
           class="navbtn"
@@ -110,7 +112,12 @@
               <a class="btn primary" id="btnQuoteTop" href="#cotizar"
                 >Enviar planos para cotización</a
               >
-              <a class="btn ghost" id="btnWhatsTop" href="#" rel="noopener"
+              <a
+                class="btn whatsapp"
+                id="btnWhatsTop"
+                href="#"
+                target="_blank"
+                rel="noopener"
                 >WhatsApp</a
               >
             </div>
@@ -248,16 +255,52 @@
             <span>Proveedores Tier 1 / Tier 2</span>
           </div>
 
-          <div class="gallery" aria-label="Galería (placeholders)">
-            <div class="ph">Imagen 1 (pieza)</div>
-            <div class="ph">Imagen 2 (fixture)</div>
-            <div class="ph">Imagen 3 (conjunto)</div>
-            <div class="ph">Imagen 4 (detalle)</div>
+          <div class="gallery" aria-label="Galería (clic para ver grande)">
+            <figure class="shot">
+              <img
+                src="assets/img/maquinados-01.webp"
+                alt="Maquinado CNC de precisión (detalle)"
+                class="shot-img"
+                data-gallery="maquinados"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+
+            <figure class="shot">
+              <img
+                src="assets/img/maquinados-02.webp"
+                alt="Fixture / dispositivo de prueba para línea de producción"
+                class="shot-img"
+                data-gallery="maquinados"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+
+            <figure class="shot">
+              <img
+                src="assets/img/maquinados-03.webp"
+                alt="Conjunto mecanizado para mantenimiento industrial"
+                class="shot-img"
+                data-gallery="maquinados"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+
+            <figure class="shot">
+              <img
+                src="assets/img/maquinados-04.webp"
+                alt="Medición y validación dimensional (metrología)"
+                class="shot-img"
+                data-gallery="maquinados"
+                data-last="1"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
           </div>
-          <p class="muted">
-            *Reemplaza los placeholders por tus fotos reales cuando las tengas
-            listas.
-          </p>
         </div>
       </section>
 
@@ -339,48 +382,88 @@
             técnica clara.
           </p>
 
-          <form id="quoteForm" class="form">
+          <div class="sendPlan">
+            <div class="sendPlan__title">¿Cómo enviarnos el plano?</div>
+            <ul class="sendPlan__list">
+              <li>
+                <strong>WhatsApp:</strong> PDF/JPG o link
+                (Drive/OneDrive/Dropbox) — respuesta rápida.
+              </li>
+              <li>
+                <strong>Correo:</strong> adjunta PDF/DWG/STEP a
+                <a
+                  href="mailto:info@boxfox1.com?subject=%5Bmaquinados.boxfox1.com%5D%20Cotizaci%C3%B3n%20t%C3%A9cnica"
+                  >info@boxfox1.com</a
+                >.
+              </li>
+              <li>
+                <strong>Archivos grandes:</strong> manda un link compartido
+                (permiso “cualquiera con el enlace”).
+              </li>
+            </ul>
+          </div>
+
+          <form
+            id="quoteForm"
+            action="https://formspree.io/f/xjgekanv"
+            method="POST"
+          >
             <div class="form__row">
-              <label
-                >Nombre
-                <input name="name" type="text" autocomplete="name" required />
+              <label>
+                Nombre
+                <input name="name" type="text" autocomplete="name" />
               </label>
-              <label
-                >Empresa
+
+              <label>
+                Empresa
                 <input name="company" type="text" autocomplete="organization" />
               </label>
             </div>
 
             <div class="form__row">
-              <label
-                >Teléfono / WhatsApp
-                <input name="phone" type="tel" autocomplete="tel" />
+              <label>
+                Teléfono / Email
+                <input
+                  name="contact"
+                  type="text"
+                  placeholder="Teléfono o correo"
+                />
               </label>
-              <label
-                >Ciudad
+
+              <label>
+                Ciudad
                 <input name="city" type="text" autocomplete="address-level2" />
               </label>
             </div>
 
-            <label
-              >Descripción breve (pieza, material, tolerancias, cantidad, fecha
-              requerida)
-              <textarea name="msg" rows="4" required></textarea>
+            <label>
+              Descripción
+              <textarea
+                name="message"
+                rows="4"
+                placeholder="Pieza, material, tolerancias, cantidad, fecha requerida…"
+                required
+              ></textarea>
             </label>
+
+            <input
+              type="hidden"
+              name="_subject"
+              value="Nueva solicitud de cotización — Maquinados Boxfox1"
+            />
+            <input
+              type="text"
+              name="_gotcha"
+              style="display: none"
+              tabindex="-1"
+              autocomplete="off"
+            />
 
             <div class="form__actions">
               <button class="btn primary" type="submit">
-                Enviar por correo
+                Enviar solicitud
               </button>
-              <a class="btn ghost" id="btnWhatsBottom" href="#" rel="noopener"
-                >Enviar por WhatsApp</a
-              >
             </div>
-
-            <p class="muted">
-              *Adjuntos: envía el plano directamente por correo o WhatsApp
-              (PDF/DWG/STEP).
-            </p>
           </form>
         </div>
       </section>
@@ -399,9 +482,14 @@
             >info@boxfox1.com</a
           >
           <span class="sep">|</span>
-          <a id="footerWhats" href="#" rel="noopener">WhatsApp 4444989198</a>
+          <a id="footerWhats" href="#" target="_blank" rel="noopener"
+            >WhatsApp 4444989198</a
+          >
           <span class="sep">|</span>
-          <a href="https://www.linkedin.com/company/boxfox1" rel="noopener"
+          <a
+            href="https://www.linkedin.com/company/boxfox1"
+            target="_blank"
+            rel="noopener"
             >LinkedIn</a
           >
         </div>
@@ -411,7 +499,24 @@
       </div>
     </footer>
 
-    <script src="/assets/js/main.js"></script>
+    <!-- Lightbox (clic para ver grande) -->
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <button class="lb-btn lb-close" type="button" aria-label="Cerrar">
+        ×
+      </button>
+      <button class="lb-btn lb-prev" type="button" aria-label="Anterior">
+        ‹
+      </button>
+
+      <figure class="lb-figure">
+        <img id="lbImg" alt="" />
+        <figcaption id="lbCap"></figcaption>
+      </figure>
+
+      <button class="lb-btn lb-next" type="button" aria-label="Siguiente">
+        ›
+      </button>
+    </div>
 
     <!-- Schema -->
     <script type="application/ld+json">
@@ -426,5 +531,7 @@
         "sameAs": ["https://www.linkedin.com/company/boxfox1"]
       }
     </script>
+
+    <script src="assets/js/main.js"></script>
   </body>
 </html>
