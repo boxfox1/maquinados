@@ -109,29 +109,6 @@ h3 {
   padding: 4px 0; /* compacta */
 }
 
-/* Brand / Logo */
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.brand-logo {
-  display: block;
-  height: var(--logo-h);
-  width: auto;
-  object-fit: contain;
-  object-position: left center;
-  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
-}
-
-.brand-text small {
-  display: block;
-  opacity: 0.8;
-  font-size: 12px;
-  margin-top: 2px;
-}
-
 /* =========================
    Nav
 ========================= */
@@ -783,11 +760,33 @@ textarea:focus {
   transform: translateY(-3px);
   box-shadow: 0 18px 34px rgba(0, 0, 0, 0.45);
 }
-/* ===== FIX: logo se ve chico por aire dentro del archivo ===== */
+/* ===== LOGO (mismo que web.boxfox1.com) ===== */
+.header__inner {
+  min-height: 60px; /* suficiente para que no aplaste el logo */
+  padding: 6px 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .brand-logo {
+  height: 3px; /* AJUSTA: 36–44 según te guste */
+  width: auto;
+  display: block;
+  object-fit: contain;
+  object-position: left center;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
+}
+/* ===== DEBUG: forzar logo a la fuerza ===== */
+header.header .brand img.brand-logo {
   height: 32px !important;
   width: auto !important;
+  max-height: none !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  display: block !important;
   object-fit: contain !important;
-  transform: scale(1); /* “zoom” al contenido */
-  transform-origin: left center;
 }
