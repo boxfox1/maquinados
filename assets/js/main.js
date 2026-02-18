@@ -165,4 +165,25 @@
         document.body.style.overflow = "";
     }
   }, 500);
+  /* ==============================
+   WhatsApp flotante delayed
+============================== */
+
+window.addEventListener("load", () => {
+  const waFloat = document.querySelector(".wa-float");
+
+  if (!waFloat) return;
+
+  waFloat.style.opacity = "0";
+  waFloat.style.transform = "translateY(20px)";
+  waFloat.style.pointerEvents = "none";
+
+  setTimeout(() => {
+    waFloat.style.transition = "all .45s ease";
+    waFloat.style.opacity = "1";
+    waFloat.style.transform = "translateY(0)";
+    waFloat.style.pointerEvents = "auto";
+  }, 4000); // 4 segundos
+});
+
 })();
