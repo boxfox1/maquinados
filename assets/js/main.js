@@ -1,75 +1,137 @@
-(() => {
-  const $ = (s) => document.querySelector(s);
+/* =========================================================
+FILE: /assets/js/main.js  (maquinados.boxfox1.com) — V3 stable
+- menu móvil
+- modal privacidad estable
+- scroll lock con contador
+- lightbox gallery
+========================================================= */
+(function () {
+  const header = document.querySelector("[data-cabecera]");
+  const navBtn = document.querySelector("[data-navbtn]");
+  const panel = document.querySelector("[data-panel]");
 
-  // Year
-  const y = $("#y");
-  if (y) y.textContent = new Date().getFullYear();
+  // Shadow header
+  const onScroll = () => {
+    if (!header) return;
+    header.classList.toggle("is-shadow", window.scrollY > 6);
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
 
-  // Mobile nav
-  const navBtn = $(".navbtn");
-  const nav = $(".nav");
+  // Scroll lock counter (panel + modal + lightbox)
+  let lockCount = 0;
+  const lockScroll = () => {
+    lockCount += 1;
+    if (lockCount === 1) document.documentElement.style.overflow = "hidden";
+  };
+  const unlockScroll = () => {
+    lockCount = Math.max(0, lockCount - 1);
+    if (lockCount === 0) document.documentElement.style.overflow = "";
+  };
 
-  if (navBtn && nav) {
-    navBtn.addEventListener("click", () => {
-      const open = nav.classList.toggle("open");
-      navBtn.setAttribute("aria-expanded", open ? "true" : "false");
-    });
+  // Panel móvil
+  const isPanelOpen = () => panel && panel.classList.contains("is-open");
+  const setPanel = (open) => {
+    if (!panel || !navBtn) return;
+    const willOpen = !!open;
+    const isOpenNow = isPanelOpen();
+    if (willOpen === isOpenNow) return;
 
-    nav.addEventListener("click", (e) => {
+    panel.classList.toggle("is-open", willOpen);
+    panel.setAttribute("aria-hidden", willOpen ? "false" : "true");
+    navBtn.setAttribute("aria-expanded", willOpen ? "true" : "false");
+
+    if (willOpen) lockScroll();
+    else unlockScroll();
+  };
+
+  if (navBtn && panel) {
+    navBtn.addEventListener("click", () => setPanel(!isPanelOpen()));
+
+    panel.addEventListener("click", (e) => {
       const a = e.target.closest("a");
-      if (a) nav.classList.remove("open");
+      if (a) setPanel(false);
     });
 
     document.addEventListener("click", (e) => {
-      const inside = nav.contains(e.target) || navBtn.contains(e.target);
-      if (!inside) nav.classList.remove("open");
+      if (!isPanelOpen()) return;
+      const clickedBtn = navBtn.contains(e.target);
+      const clickedPanel = panel.contains(e.target);
+      if (!clickedBtn && !clickedPanel) setPanel(false);
     });
   }
 
-  // WhatsApp link with origin
-  const origin = "maquinados.boxfox1.com";
-  const phone = "524444989198";
-  const waBase = `https://wa.me/${phone}`;
-  const waText = (msg) =>
-    `${waBase}?text=${encodeURIComponent(`[${origin}] ${msg}`)}`;
+  // Modal privacidad
+  const modal = document.getElementById("privacyModal");
+  const openers = document.querySelectorAll("[data-open-privacy]");
+  const closers = modal ? modal.querySelectorAll("[data-modal-close]") : [];
+  let lastFocusEl = null;
 
-  const btnWhatsTop = $("#btnWhatsTop");
-  const footerWhats = $("#footerWhats");
+  const isModalOpen = () => modal && modal.classList.contains("is-open");
 
-  const defaultWA =
-    "Hola, quiero cotizar un maquinado. Enviaré plano/muestra. ¿Qué información necesitas (material, tolerancias, cantidad, fecha)?";
+  const openModal = (triggerEl) => {
+    if (!modal || isModalOpen()) return;
 
-  [btnWhatsTop, footerWhats].forEach((el) => {
-    if (el) el.href = waText(defaultWA);
-  });
+    lastFocusEl = triggerEl || document.activeElement;
 
-  // Lightbox gallery
-  const lb = $("#lightbox");
-  const lbImg = $("#lbImg");
-  const lbCap = $("#lbCap");
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+    lockScroll();
 
+    const closeBtn = modal.querySelector("[data-modal-close]");
+    if (closeBtn) closeBtn.focus({ preventScroll: true });
+  };
+
+  const closeModal = () => {
+    if (!modal || !isModalOpen()) return;
+
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+    unlockScroll();
+
+    if (lastFocusEl && typeof lastFocusEl.focus === "function") {
+      lastFocusEl.focus({ preventScroll: true });
+    }
+    lastFocusEl = null;
+  };
+
+  openers.forEach((el) =>
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      openModal(el);
+    })
+  );
+
+  closers.forEach((el) =>
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      closeModal();
+    })
+  );
+
+  if (modal) {
+    modal.addEventListener("click", (e) => {
+      if (e.target && e.target.hasAttribute("data-modal-close")) {
+        e.preventDefault();
+        closeModal();
+      }
+    });
+  }
+
+  // Lightbox
+  const lb = document.getElementById("lightbox");
+  const lbImg = document.getElementById("lbImg");
+  const lbCap = document.getElementById("lbCap");
   const btnClose = lb ? lb.querySelector(".lb-close") : null;
   const btnPrev = lb ? lb.querySelector(".lb-prev") : null;
   const btnNext = lb ? lb.querySelector(".lb-next") : null;
 
-  const items = Array.from(
-    document.querySelectorAll('img[data-gallery="maquinados"]'),
-  );
-
+  const items = Array.from(document.querySelectorAll('img[data-gallery="maquinados"]'));
   let idx = 0;
-  let prevBodyOverflow = "";
 
-  function setScrollLock(lock) {
-    // Important: lock/unlock scroll safely
-    if (lock) {
-      prevBodyOverflow = document.body.style.overflow || "";
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = prevBodyOverflow;
-    }
-  }
+  const isLBOpen = () => lb && lb.classList.contains("open");
 
-  function openLB(i) {
+  const openLB = (i) => {
     if (!lb || !lbImg || !items.length) return;
 
     idx = ((i % items.length) + items.length) % items.length;
@@ -82,42 +144,30 @@
 
     lb.classList.add("open");
     lb.setAttribute("aria-hidden", "false");
-    setScrollLock(true);
-  }
+    lockScroll();
+  };
 
-  function closeLB() {
-    if (!lb || !lbImg) return;
+  const closeLB = () => {
+    if (!lb || !lbImg || !isLBOpen()) return;
 
     lb.classList.remove("open");
     lb.setAttribute("aria-hidden", "true");
     lbImg.src = "";
-    setScrollLock(false);
-  }
+    unlockScroll();
+  };
 
-  function prev() {
-    if (!items.length) return;
-    openLB(idx - 1);
-  }
-
-  function next() {
-    if (!items.length) return;
-    openLB(idx + 1);
-  }
+  const prev = () => openLB(idx - 1);
+  const next = () => openLB(idx + 1);
 
   if (lb && items.length) {
-    // Make images & figures clickable (móvil)
     items.forEach((img, i) => {
-      img.style.cursor = "zoom-in";
       img.addEventListener("click", (e) => {
         e.preventDefault();
         openLB(i);
       });
-
       const fig = img.closest("figure");
       if (fig) {
-        fig.style.cursor = "zoom-in";
         fig.addEventListener("click", (e) => {
-          // evita doble disparo
           if (e.target === img) return;
           e.preventDefault();
           openLB(i);
@@ -129,61 +179,25 @@
     btnPrev && btnPrev.addEventListener("click", prev);
     btnNext && btnNext.addEventListener("click", next);
 
-    // Cerrar si dan click en el fondo (no sobre la imagen/botones)
     lb.addEventListener("click", (e) => {
       const clickedButton = e.target.closest(".lb-btn");
       const clickedImage = e.target === lbImg;
       if (!clickedButton && !clickedImage && e.target === lb) closeLB();
     });
-
-    // Teclado
-    window.addEventListener("keydown", (e) => {
-      if (!lb.classList.contains("open")) return;
-      if (e.key === "Escape") closeLB();
-      if (e.key === "ArrowLeft") prev();
-      if (e.key === "ArrowRight") next();
-    });
-
-    // Seguridad: si por cualquier razón el lightbox pierde el estado,
-    // re-habilita scroll
-    window.addEventListener("focus", () => {
-      if (!lb.classList.contains("open")) setScrollLock(false);
-    });
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden && lb.classList.contains("open")) return;
-      if (!lb.classList.contains("open")) setScrollLock(false);
-    });
-  } else {
-    // Si no hay lightbox, asegúrate que nunca quede scroll bloqueado
-    document.body.style.overflow = "";
   }
-  // Seguridad: nunca dejar el body sin scroll si el lightbox NO está abierto
-  setInterval(() => {
-    const lb = document.getElementById("lightbox");
-    if (!lb || !lb.classList.contains("open")) {
-      if (document.body.style.overflow === "hidden")
-        document.body.style.overflow = "";
+
+  // ESC cierra: modal primero, luego lightbox, luego panel
+  window.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+
+    if (isModalOpen()) {
+      closeModal();
+      return;
     }
-  }, 500);
-  /* ==============================
-   WhatsApp flotante delayed
-============================== */
-
-window.addEventListener("load", () => {
-  const waFloat = document.querySelector(".wa-float");
-
-  if (!waFloat) return;
-
-  waFloat.style.opacity = "0";
-  waFloat.style.transform = "translateY(20px)";
-  waFloat.style.pointerEvents = "none";
-
-  setTimeout(() => {
-    waFloat.style.transition = "all .45s ease";
-    waFloat.style.opacity = "1";
-    waFloat.style.transform = "translateY(0)";
-    waFloat.style.pointerEvents = "auto";
-  }, 4000); // 4 segundos
-});
-
+    if (isLBOpen()) {
+      closeLB();
+      return;
+    }
+    if (isPanelOpen()) setPanel(false);
+  });
 })();
