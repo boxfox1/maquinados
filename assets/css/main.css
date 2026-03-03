@@ -333,18 +333,18 @@ a:hover {
   background:
     radial-gradient(
       900px 420px at 18% 18%,
-      rgba(26, 120, 255, 0.14),
+      rgba(26, 120, 255, 0.16),
       transparent 60%
     ),
     radial-gradient(
       700px 360px at 85% 18%,
-      rgba(15, 23, 42, 0.08),
+      rgba(15, 23, 42, 0.12),
       transparent 58%
     ),
-    linear-gradient(180deg, #ffffff 0%, #f7f9fc 55%, #f2f5fb 100%);
+    linear-gradient(180deg, #e6ebf2 0%, #dfe5ec 55%, #d6dde6 100%);
   border-bottom: 1px solid var(--linea);
   padding: 52px 0 34px;
-  box-shadow: 0 8px 22px rgba(2, 6, 23, 0.05);
+  box-shadow: 0 8px 22px rgba(2, 6, 23, 0.06);
 }
 .hero__grid {
   display: grid;
